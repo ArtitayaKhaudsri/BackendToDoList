@@ -50,6 +50,7 @@ class ToDoList {
         const totalData = await this.getAllToDoList();
         //Find information the desired status.
         const indexData =  await this.getIndexData(id)
+        console.log(newData)
         //edit the desired.
         Object.assign(totalData[indexData], newData)
         //write edit status
@@ -59,19 +60,6 @@ class ToDoList {
         );
     }
 
-    async updateStatus(id) {
-        //get data
-        const data = await this.getAllToDoList();
-        //Find information and edit the desired status.
-        const indexData = await this.getIndexData(id)
-        data[indexData].success = !data[indexData].success;
-        //write edit status
-        await fs.promises.writeFile(
-          this.path,
-          JSON.stringify(data, null, 2)
-        );
-        return data;
-    }
     async deleteToDoList(id) {
         //get data
         const data = await this.getAllToDoList()

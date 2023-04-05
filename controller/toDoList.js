@@ -18,21 +18,18 @@ const getToDoList = async (req, res) => {
         if (!data) {
             return res.status(404).json({message: "Sorry not found data"})
         }
-        res.status(200).json({data: data});
+        res.status(200).json({message: "Get a to do list success", data: data});
     } catch (err) {
-        res.status(400).json({message: "Sorry can't get data", err});
+        res.status(400).json({message: "Sorry can't get data", error: err});
     }
 }
 
 const getTodayList = async (req, res) => {
     try {
         const data = await toDoList.getTodayToDoList()
-        if (!data) {
-            return res.status(404).json({message: "Not found data"})
-        }
-        res.status(200).json({data: data});
+        res.status(200).json({message: "Get to do list success", data: data});
     } catch (err) {
-        res.status(400).json({message: "Sorry can't get data", err});
+        res.status(400).json({message: "Sorry can't get data", error: err});
     }
 }
 
@@ -40,41 +37,28 @@ const createToDoList = async (req, res) => {
     const id = toDoList.createId();
     try {
         await toDoList.create(id, req.body);
-        res.status(201).json({ message: 'Post create successfully.'})
-        res.send("create successful");
+        res.status(201).json({ message: 'Create to do list successfully.'})
     } catch (err) {
-        res.status(400).json({message: "Some error occured", err});
+        res.status(400).json({message: "Some error occured", error: err});
     }
 }
 
 const editToDoList = async (req, res) => {
-    await toDoList.updateToDoList(req.params.id, req.body)
     try {
-        res.status(201).json({message: 'Post create successfully.'})
-        res.send("create successful");
+        await toDoList.updateToDoList(req.params.id, req.body)
+        res.status(201).json({message: 'Edit to do list successfully.'})
     } catch (err) {
-        res.status(400).json({message: "Some error occured", err});
-    }
-}
-
-const editStatusToDoList = async (req, res) => {
-    try {
-        const data = await toDoList.updateStatus(req.params.id)
-        if (!data) {
-            return res.json({success:false, message: 'Post not found!'})
-        }
-        res.status(201).json(data);
-    } catch (err) {
-        res.status(400).json({message: "sorry can't edit", err});
+        res.status(400).json({message: "Some error occured", error: err});
     }
 }
 
 const deleteToDoList = async (req, res) => {
+    await toDoList.deleteToDoList(req.params.id)
     try {
-        await toDoList.deleteToDoList(req.params.id)
-        res.status(204).send()
+
+        res.status(204).send("delete to do list success");
     } catch (err) {
-        res.status(400).json({message: "Some error occured", err});
+        res.status(400).json({message: "Some error occured", error: err});
     }
 }
 
@@ -84,6 +68,5 @@ module.exports = {
     getTodayList,
     createToDoList,
     editToDoList,
-    editStatusToDoList,
     deleteToDoList
 }
