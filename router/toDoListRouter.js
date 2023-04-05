@@ -1,29 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const toDoLists = require("../data/to-do-list.json");
+const {validator} = require('../middleware/validator');
+const {getAllToDoList, getToDoList, createToDoList, editToDoList, deleteToDoList, editStatusToDoList,getTodayList} = require("../controller/toDoList");
 
-router.get('/toDoLists', (req, res) => {
-    res.json(toDoLists)
-})
-
-router.get('/toDoLists/:id', (req, res) => {
-    res.json(toDoLists.find(toDoLists => toDoLists.id === req.params.id))
-})
-
-router.post('/addToDoList', (req, res) => {
-    toDoLists.push(req.body)
-    res.status(201).json(req.body)
-})
-
-router.put('/toDoLists/:id', (req, res) => {
-    const updateIndex =toDoLists.findIndex(book => book.id === req.params.id)
-    res.json(Object.assign(toDoLists[updateIndex], req.body))
-})
-
-router.delete('/toDoLists/:id', (req, res) => {
-    const deletedIndex = toDoLists.findIndex(toDoList => toDoList.id === req.params.id)
-    toDoLists.splice(deletedIndex, 1)
-    res.status(204).send()
-})
+router.get('/toDoLists', getAllToDoList);
+router.get('/toDoLists/:id', getToDoList);
+router.get('/toDoListsToday', getTodayList)
+router.post('/addToDoList', validator, createToDoList);
+router.post('/editToDoList/:id', editToDoList);
+router.get('/editStatusToDoList/:id', editStatusToDoList);
+router.get('/deleteToDoList/:id', deleteToDoList);
 
 module.exports = router;
